@@ -20,7 +20,7 @@ Get["/"] = _ =>
 {
     // Return 'No Content' for 30 seconds in the event of a SQL Exception
     this.HasCircuit(new NoContentOnErrorCircuit()
-        .ForException<KeyNotFoundException>()
+        .ForException<SqlException>()
         .WithOpenTimeInSeconds(30));
     
     doSomething();
