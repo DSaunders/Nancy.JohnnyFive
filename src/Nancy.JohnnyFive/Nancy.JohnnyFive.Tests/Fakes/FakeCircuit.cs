@@ -1,7 +1,7 @@
 ﻿namespace Nancy.JohnnyFive.Tests.Fakes
 {
     using System;
-    using Circuits;
+    using JohnnyFive.Circuits;
     using Models;
 
     public class FakeCircuit : ICircuit

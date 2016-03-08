@@ -1,8 +1,8 @@
 namespace Nancy.JohnnyFive.Tests.Fakes
 {
     using System.Collections.Generic;
-    using Circuits;
     using Database;
+    using JohnnyFive.Circuits;
 
     public class FakeJohnnyFiveDatabase : IJohhnyFiveDatabase
     {

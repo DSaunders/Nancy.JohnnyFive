@@ -12,7 +12,7 @@
             if (!module.Context.Items.ContainsKey(Constants.ContextItemName))
                 module.Context.Items[Constants.ContextItemName] = new List<ICircuit>();
 
-            ((IList)module.Context.Items[Constants.ContextItemName]).Add(circuit);
+            ((IList)module.Context.Items[Constants.ContextItemName]).Add(circuit ?? new NoContentOnErrorCircuit());
         }
     }
 
