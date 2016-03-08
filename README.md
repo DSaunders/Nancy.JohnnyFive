@@ -9,6 +9,7 @@ Get["/"] = _ =>
     //  a period of 10 seconds (returning 204-NoContent). After 10 seconds, the route
     //  can be hit again
     this.HasCircuit();
+    
     doSomething();
 }
 ```
