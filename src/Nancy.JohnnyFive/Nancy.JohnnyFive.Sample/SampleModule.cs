@@ -11,11 +11,11 @@
         {
             Get["/"] = _ =>
             {
-                this.HasCircuitBreaker(new NoContentOnErrorCircuit()
+                this.HasCircuit(new NoContentOnErrorCircuit()
                     .ForException<FileNotFoundException>()
                     .WithOpenTimeInSeconds(10));
 
-                this.HasCircuitBreaker(new NoContentOnErrorCircuit()
+                this.HasCircuit(new NoContentOnErrorCircuit()
                     .ForException<KeyNotFoundException>()
                     .WithOpenTimeInSeconds(30));
                 

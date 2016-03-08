@@ -24,7 +24,7 @@
             var fakeCircuit = new FakeCircuit();
 
             // When
-            _fakeModule.HasCircuitBreaker(fakeCircuit);
+            _fakeModule.HasCircuit(fakeCircuit);
             
             // Then
             _fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
@@ -36,11 +36,11 @@
         public void Add_To_List_Of_Circuits_On_Subsequent_Calls()
         {
             // Given
-            _fakeModule.HasCircuitBreaker(new FakeCircuit());
+            _fakeModule.HasCircuit(new FakeCircuit());
             var fakeCircuit = new FakeCircuit();
 
             // When
-            _fakeModule.HasCircuitBreaker(fakeCircuit);
+            _fakeModule.HasCircuit(fakeCircuit);
 
             // Then
             _fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
@@ -52,7 +52,7 @@
         public void Adds_Default_Circuit_If_None_Specified()
         {
             // When
-            _fakeModule.HasCircuitBreaker();
+            _fakeModule.HasCircuit();
 
             // Then
             _fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
