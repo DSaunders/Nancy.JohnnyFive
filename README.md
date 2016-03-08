@@ -13,7 +13,7 @@ Get["/"] = _ =>
 }
 ```
 
-Multiple circtuits are provided, and all are customisable:
+Multiple circuits are provided, and all are customisable:
 
 ```csharp
 Get["/"] = _ => 
