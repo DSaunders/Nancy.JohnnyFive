@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using Bootstrapper;
-    using Database;
+    using Store;
 
     public class Registrations : IRegistrations
     {
@@ -12,7 +12,7 @@
             {
                 return new List<TypeRegistration>
                 {
-                    new TypeRegistration(typeof (IJohhnyFiveDatabase), typeof (JohhnyFiveDatabase), Lifetime.Singleton)
+                    new TypeRegistration(typeof (IJohhnyFiveStore), typeof (JohhnyFiveStore), Lifetime.Singleton)
                 };
             }
         }

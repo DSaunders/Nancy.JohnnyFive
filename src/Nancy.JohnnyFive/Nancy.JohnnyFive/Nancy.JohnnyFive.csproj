@@ -61,19 +61,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Circuits\LastGoodResponseOnErrorCircuit.cs" />
     <Compile Include="Circuits\NoContentOnErrorCircuit.cs" />
     <Compile Include="Dates\CurrentDateTime.cs" />
     <Compile Include="Dates\ICurrentDateTime.cs" />
     <Compile Include="Models\CircuitState.cs" />
     <Compile Include="Circuits\ICircuit.cs" />
-    <Compile Include="Circuits\_spike.cs" />
     <Compile Include="Models\Constants.cs" />
-    <Compile Include="Database\JohhnyFiveDatabase.cs" />
-    <Compile Include="Database\IJohhnyFiveDatabase.cs" />
+    <Compile Include="Store\IJohhnyFiveStore.cs" />
     <Compile Include="JohnnyFiveStartup.cs" />
-    <Compile Include="Registrations.cs" />
+    <Compile Include="Startup\Registrations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NancyExtensions.cs" />
+    <Compile Include="Store\JohhnyFiveStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

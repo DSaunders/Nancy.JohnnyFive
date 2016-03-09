@@ -7,12 +7,12 @@
 
     public static class NancyExtensions
     {
-        public static void HasCircuit(this NancyModule module, ICircuit circuit = null)
+        public static void CanShortCircuit(this NancyModule module, ICircuit circuit = null)
         {
             if (!module.Context.Items.ContainsKey(Constants.ContextItemName))
                 module.Context.Items[Constants.ContextItemName] = new List<ICircuit>();
 
-            ((IList)module.Context.Items[Constants.ContextItemName]).Add(circuit ?? new NoContentOnErrorCircuit());
+            ((IList)module.Context.Items[Constants.ContextItemName]).Add(circuit ?? new LastGoodResponseOnErrorCircuit());
         }
     }
 

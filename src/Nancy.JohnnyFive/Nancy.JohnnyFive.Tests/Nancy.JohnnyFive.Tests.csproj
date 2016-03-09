@@ -66,14 +66,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Circuits\LastGoodResponseOnErrorCircuit.cs" />
     <Compile Include="Circuits\NoContentOnErrorCircuitTests.cs" />
     <Compile Include="Fakes\FakeCircuit.cs" />
     <Compile Include="Fakes\FakeCurrentDateTime.cs" />
-    <Compile Include="Fakes\FakeJohnnyFiveDatabase.cs" />
     <Compile Include="Fakes\FakeNancyModule.cs" />
-    <Compile Include="JohnnyFiveStartupTests.cs" />
     <Compile Include="NancyExtensionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Store\JohnnyFiveStoreTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -84,6 +84,7 @@
       <Name>Nancy.JohnnyFive</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

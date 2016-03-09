@@ -3,14 +3,14 @@ namespace Nancy.JohnnyFive
     using System.Collections.Generic;
     using Bootstrapper;
     using Circuits;
-    using Database;
     using Models;
+    using Store;
 
     public class JohnnyFiveStartup : IApplicationStartup
     {
-        private readonly IJohhnyFiveDatabase _db;
+        private readonly IJohhnyFiveStore _db;
 
-        public JohnnyFiveStartup(IJohhnyFiveDatabase db)
+        public JohnnyFiveStartup(IJohhnyFiveStore db)
         {
             _db = db;
         }
@@ -22,21 +22,15 @@ namespace Nancy.JohnnyFive
                 if (!ctx.Items.ContainsKey(Constants.ContextItemName))
                     return;
 
-                EnsureCircuitsAreInDatabase(ctx);
+                _db.AddIfNotExists(ctx.Request.Path, ctx.Items[Constants.ContextItemName] as IList<ICircuit>);
 
-                foreach (var circuit in _db.CircuitBreakers[ctx.Request.Path])
-                {
+                foreach (var circuit in _db.GetForRoute(ctx.Request.Path))
                     circuit.AfterRequest(ctx.Response);
-                }
-
             };
 
             pipelines.BeforeRequest += (ctx) =>
             {
-                if (!_db.CircuitBreakers.ContainsKey(ctx.Request.Path))
-                    return null;
-
-                foreach (var circuit in _db.CircuitBreakers[ctx.Request.Path])
+                foreach (var circuit in _db.GetForRoute(ctx.Request.Path))
                 {
                     var result = circuit.BeforeRequest();
                     if (result != null)
@@ -46,15 +40,14 @@ namespace Nancy.JohnnyFive
                 return null;
             };
 
-
             pipelines.OnError += (ctx, ex) =>
             {
                 if (!ctx.Items.ContainsKey(Constants.ContextItemName))
                     return null;
 
-                EnsureCircuitsAreInDatabase(ctx);
+                _db.AddIfNotExists(ctx.Request.Path, ctx.Items[Constants.ContextItemName] as IList<ICircuit>);
 
-                foreach (var circuit in _db.CircuitBreakers[ctx.Request.Path])
+                foreach (var circuit in _db.GetForRoute(ctx.Request.Path))
                 {
                     var result = circuit.OnError(ex);
                     if (result != null)
@@ -63,13 +56,6 @@ namespace Nancy.JohnnyFive
 
                 return null;
             };
-        }
-
-        private void EnsureCircuitsAreInDatabase(NancyContext ctx)
-        {
-            // The first time this is called we add the circtuis to the singleton.
-            if (!_db.CircuitBreakers.ContainsKey(ctx.Request.Path))
-                _db.CircuitBreakers.Add(ctx.Request.Path, (IList<ICircuit>)ctx.Items[Constants.ContextItemName]);
         }
     }
 }

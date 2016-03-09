@@ -24,7 +24,7 @@
             var fakeCircuit = new FakeCircuit();
 
             // When
-            _fakeModule.HasCircuit(fakeCircuit);
+            _fakeModule.CanShortCircuit(fakeCircuit);
             
             // Then
             _fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
@@ -33,14 +33,14 @@
         }
 
         [Fact]
-        public void Add_To_List_Of_Circuits_On_Subsequent_Calls()
+        public void Adds_To_List_Of_Circuits_On_Subsequent_Calls()
         {
             // Given
-            _fakeModule.HasCircuit(new FakeCircuit());
+            _fakeModule.CanShortCircuit(new FakeCircuit());
             var fakeCircuit = new FakeCircuit();
 
             // When
-            _fakeModule.HasCircuit(fakeCircuit);
+            _fakeModule.CanShortCircuit(fakeCircuit);
 
             // Then
             _fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
@@ -52,12 +52,12 @@
         public void Adds_Default_Circuit_If_None_Specified()
         {
             // When
-            _fakeModule.HasCircuit();
+            _fakeModule.CanShortCircuit();
 
             // Then
             _fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
             ((IList)_fakeModule.Context.Items[Constants.ContextItemName]).Count.ShouldEqual(1);
-            ((IList)_fakeModule.Context.Items[Constants.ContextItemName])[0].ShouldBeType<NoContentOnErrorCircuit>();
+            ((IList)_fakeModule.Context.Items[Constants.ContextItemName])[0].ShouldBeType<LastGoodResponseOnErrorCircuit>();
         }
     }
 }

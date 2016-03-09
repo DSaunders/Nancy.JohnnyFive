@@ -1,6 +1,5 @@
 ﻿namespace Nancy.JohnnyFive.Sample
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using Circuits;
@@ -11,11 +10,11 @@
         {
             Get["/"] = _ =>
             {
-                this.HasCircuit(new NoContentOnErrorCircuit()
+                this.CanShortCircuit(new NoContentOnErrorCircuit()
                     .ForException<FileNotFoundException>()
                     .WithOpenTimeInSeconds(10));
 
-                this.HasCircuit(new NoContentOnErrorCircuit()
+                this.CanShortCircuit(new NoContentOnErrorCircuit()
                     .ForException<KeyNotFoundException>()
                     .WithOpenTimeInSeconds(30));
                 

@@ -4,7 +4,7 @@
     {
         public FakeNancyModule()
         {
-            this.Context = new NancyContext();
+            Context = new NancyContext();
         }
     }
 }
