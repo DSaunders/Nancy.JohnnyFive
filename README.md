@@ -5,8 +5,8 @@ Allows you to short-circuit Nancy routes in the event of an error or excess load
 
 Get["/"] = _ => 
 {
-    // If an exception is thrown, short-circuits the route and returns the last
-    // good response for 10 seconds
+    // If an exception is thrown, short-circuits the route for 10 seconds, 
+    // returning the last good response instead
     this.CanShortCircuit();
     
     doStuff();
