@@ -1,5 +1,6 @@
 ﻿namespace Nancy.JohnnyFive.Sample
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using Circuits;
@@ -29,9 +30,11 @@
 
             Get["/underload"] = _ =>
             {
-                this.CanShortCircuit(new LastGoodResponseUnderLoad()
+                this.CanShortCircuit(new NoContentUnderLoadCircuit()
                     .WithRequestSampleTimeInSeconds(10)
-                    .WithRequestThreshold(40));
+                    .WithRequestThreshold(5));
+
+                return "Under load " + DateTime.Now;
             };
         }
     }
