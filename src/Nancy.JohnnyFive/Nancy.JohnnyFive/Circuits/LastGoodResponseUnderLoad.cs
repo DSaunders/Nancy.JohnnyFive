@@ -3,16 +3,18 @@
     using Base;
     using Dates;
 
-    public class LastGoodResponseOnErrorCircuit : OnErrorCircuitBase
+    public class LastGoodResponseUnderLoad : UnderLoadCircuitBase
     {
         private Response _lastGoodResponse;
 
-        public LastGoodResponseOnErrorCircuit() : this(new CurrentDateTime())
+        public LastGoodResponseUnderLoad()
         {
+            
         }
 
-        internal LastGoodResponseOnErrorCircuit(ICurrentDateTime dateTime) : base(dateTime)
+        public LastGoodResponseUnderLoad(ICurrentDateTime dateTime) : base(dateTime)
         {
+            
         }
 
         public override void AfterRequest(Response response)
@@ -20,7 +22,7 @@
             _lastGoodResponse = response;
         }
 
-        protected override Response ResponseWhenOpen()
+        protected override Response OpenResponse()
         {
             return _lastGoodResponse ?? HttpStatusCode.NoContent;
         }

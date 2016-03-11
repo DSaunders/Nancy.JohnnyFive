@@ -5,11 +5,11 @@
 
     public class FakeCurrentDateTime : ICurrentDateTime
     {
-        public DateTime FakeDateTime { get; set; }
+        public DateTime FakeNow { get; set; }
 
         public DateTime Now
         {
-            get { return FakeDateTime; }
+            get { return FakeNow; }
         }
     }
 }

@@ -66,7 +66,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Circuits\LastGoodResponseOnErrorCircuit.cs" />
+    <Compile Include="Circuits\LastGoodResponseOnErrorCircuitTests.cs" />
+    <Compile Include="Circuits\LastGoodContentUnderLoadCircuitTests.cs" />
+    <Compile Include="Circuits\NoContentUnderLoadCircuitTests.cs" />
     <Compile Include="Circuits\NoContentOnErrorCircuitTests.cs" />
     <Compile Include="Fakes\FakeCircuit.cs" />
     <Compile Include="Fakes\FakeCurrentDateTime.cs" />

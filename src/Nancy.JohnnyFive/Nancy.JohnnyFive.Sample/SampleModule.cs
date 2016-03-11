@@ -12,11 +12,11 @@
             {
                 this.CanShortCircuit(new NoContentOnErrorCircuit()
                     .ForException<FileNotFoundException>()
-                    .WithOpenTimeInSeconds(10));
+                    .WithCircuitOpenTimeInSeconds(10));
 
                 this.CanShortCircuit(new NoContentOnErrorCircuit()
                     .ForException<KeyNotFoundException>()
-                    .WithOpenTimeInSeconds(30));
+                    .WithCircuitOpenTimeInSeconds(30));
                 
                 if (this.Request.Query["fileNotFound"] != null)
                     throw new FileNotFoundException();
@@ -25,6 +25,13 @@
                     throw new KeyNotFoundException();
 
                 return "Hello, World!";
+            };
+
+            Get["/underload"] = _ =>
+            {
+                this.CanShortCircuit(new LastGoodResponseUnderLoad()
+                    .WithRequestSampleTimeInSeconds(10)
+                    .WithRequestThreshold(40));
             };
         }
     }

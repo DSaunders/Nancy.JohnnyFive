@@ -61,7 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Circuits\Base\NoContentUnderLoadCircuit.cs" />
+    <Compile Include="Circuits\Base\OnErrorCircuitBase.cs" />
     <Compile Include="Circuits\LastGoodResponseOnErrorCircuit.cs" />
+    <Compile Include="Circuits\LastGoodResponseUnderLoad.cs" />
+    <Compile Include="Circuits\NoContentUnderLoadCircuit.cs" />
     <Compile Include="Circuits\NoContentOnErrorCircuit.cs" />
     <Compile Include="Dates\CurrentDateTime.cs" />
     <Compile Include="Dates\ICurrentDateTime.cs" />

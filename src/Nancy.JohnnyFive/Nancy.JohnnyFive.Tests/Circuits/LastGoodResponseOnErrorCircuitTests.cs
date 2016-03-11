@@ -9,11 +9,11 @@
     using Should;
     using Xunit;
 
-    public class NoContentOnErrorCircuitTests
+    public class LastGoodResponseOnErrorCircuitTests
     {
         private readonly FakeCurrentDateTime _fakeDateTime;
 
-        public NoContentOnErrorCircuitTests()
+        public LastGoodResponseOnErrorCircuitTests()
         {
             _fakeDateTime = new FakeCurrentDateTime
             {
@@ -25,7 +25,7 @@
         public void Opens_For_All_Derived_Exceptions_By_Default()
         {
             // Given
-            var openOnError = new NoContentOnErrorCircuit();
+            var openOnError = new LastGoodResponseOnErrorCircuit();
 
             // When
             openOnError.OnError(new AccessViolationException());
@@ -39,7 +39,7 @@
         {
             // Given
             var openOnError =
-                new NoContentOnErrorCircuit()
+                new LastGoodResponseOnErrorCircuit()
                     .ForException<FileNotFoundException>();
 
             // When
@@ -54,7 +54,7 @@
         {
             // Given
             var openOnError =
-                new NoContentOnErrorCircuit()
+                new LastGoodResponseOnErrorCircuit()
                     .ForException<FileNotFoundException>();
 
             // When
@@ -68,7 +68,7 @@
         public void Exposes_Exception_For_Testability()
         {
             // When
-            var openOnError = new NoContentOnErrorCircuit()
+            var openOnError = new LastGoodResponseOnErrorCircuit()
                 .ForException<KeyNotFoundException>();
 
             // Then
@@ -79,7 +79,7 @@
         public void Closes_After_10_Seconds_By_Default()
         {
             // When
-            var openOnError = new NoContentOnErrorCircuit();
+            var openOnError = new LastGoodResponseOnErrorCircuit();
 
             // Then
             openOnError.CircuitOpenTime.ShouldEqual(TimeSpan.FromSeconds(10));
@@ -89,7 +89,7 @@
         public void Closes_After_Time_Specified_By_Fluent_Interface()
         {
             // When
-            var openOnError = new NoContentOnErrorCircuit()
+            var openOnError = new LastGoodResponseOnErrorCircuit()
                 .WithCircuitOpenTimeInSeconds(90);
 
             // Then
@@ -101,7 +101,7 @@
         {
             // Setup and trigger an error
             var openOnError =
-                new NoContentOnErrorCircuit(_fakeDateTime)
+                new LastGoodResponseOnErrorCircuit(_fakeDateTime)
                     .WithCircuitOpenTimeInSeconds(5);
 
             openOnError.OnError(new FileNotFoundException());
@@ -126,7 +126,7 @@
         {
             // Setup and trigger an error
             var openOnError =
-                new NoContentOnErrorCircuit(_fakeDateTime)
+                new LastGoodResponseOnErrorCircuit(_fakeDateTime)
                     .WithCircuitOpenTimeInSeconds(5);
 
             openOnError.OnError(new FileNotFoundException());
@@ -142,7 +142,7 @@
 
             // 5 seconds since error
             _fakeDateTime.FakeNow = _fakeDateTime.FakeNow.AddSeconds(1);
-            var response = openOnError.BeforeRequest();
+            var response =  openOnError.BeforeRequest();
             response.ShouldBeNull();
         }
 
@@ -150,7 +150,7 @@
         public void Exposes_Open_Time_For_Testability()
         {
             // When
-            var openOnError = new NoContentOnErrorCircuit()
+            var openOnError = new LastGoodResponseOnErrorCircuit()
                 .WithCircuitOpenTimeInSeconds(1234);
 
             // Then
@@ -158,10 +158,10 @@
         }
 
         [Fact]
-        public void Returns_No_Content_When_Open()
+        public void Returns_Last_Good_Response_When_Open()
         {
             // Given
-            var openOnError = new NoContentOnErrorCircuit()
+            var openOnError = new LastGoodResponseOnErrorCircuit()
                     .ForException<FileNotFoundException>();
 
             var firstResponse = new Response { StatusCode = HttpStatusCode.PartialContent };
@@ -169,7 +169,42 @@
 
             openOnError.AfterRequest(firstResponse);
             openOnError.AfterRequest(lastGoodResponse);
+            
+            // When
+            var result = openOnError.OnError(new FileNotFoundException());
 
+            // Then
+            result.ShouldEqual(lastGoodResponse);
+        }
+        
+        [Fact]
+        public void Returns_Last_Good_Response_When_Already_Open()
+        {
+            // Given
+            var openOnError = new LastGoodResponseOnErrorCircuit()
+                    .ForException<FileNotFoundException>();
+
+            var firstResponse = new Response {StatusCode = HttpStatusCode.PartialContent};
+            var lastGoodResponse = new Response {StatusCode = HttpStatusCode.ImATeapot};
+
+            openOnError.AfterRequest(firstResponse);
+            openOnError.AfterRequest(lastGoodResponse);
+            
+            // When
+            openOnError.OnError(new FileNotFoundException());
+            var result = openOnError.BeforeRequest();
+
+            // Then
+            result.ShouldEqual(lastGoodResponse);
+        }
+
+        [Fact]
+        public void Returns_No_Content_If_No_Good_Response_On_First_Open()
+        {
+            // Given
+            var openOnError = new LastGoodResponseOnErrorCircuit()
+                    .ForException<FileNotFoundException>();
+            
             // When
             var result = openOnError.OnError(new FileNotFoundException());
 
@@ -178,20 +213,14 @@
         }
 
         [Fact]
-        public void Returns_No_Content_When_Already_Open()
+        public void Returns_No_Content_If_No_Good_Response_When_Already_Open()
         {
             // Given
-            var openOnError = new NoContentOnErrorCircuit()
+            var openOnError = new LastGoodResponseOnErrorCircuit()
                     .ForException<FileNotFoundException>();
-
-            var firstResponse = new Response { StatusCode = HttpStatusCode.PartialContent };
-            var lastGoodResponse = new Response { StatusCode = HttpStatusCode.ImATeapot };
-
-            openOnError.AfterRequest(firstResponse);
-            openOnError.AfterRequest(lastGoodResponse);
+            openOnError.OnError(new FileNotFoundException());
 
             // When
-            openOnError.OnError(new FileNotFoundException());
             var result = openOnError.BeforeRequest();
 
             // Then
