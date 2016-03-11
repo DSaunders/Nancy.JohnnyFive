@@ -13,15 +13,46 @@ Get["/"] = _ =>
 }
 ```
 
-Multiple circuits are provided, and all are customisable:
+Multiple circuits are provided, and all are configurable:
 
 ```csharp
 Get["/"] = _ => 
 {
-    // Return 'No Content' for 30 seconds in the event of a SQL Exception
+    // Return 204-NoContent for 30 seconds in the event of a SQL Exception
     this.CanShortCircuit(new NoContentOnErrorCircuit()
         .ForException<SqlException>()
         .WithOpenTimeInSeconds(30));
+    
+    doStuff();
+}
+```
+
+Stack up multiple circuits to handle different eventualities
+
+```csharp
+Get["/"] = _ => 
+{
+    this.CanShortCircuit(new NoContentOnErrorCircuit()
+        .ForException<SqlException>()
+        .WithOpenTimeInSeconds(30));
+    
+    this.CanShortCircuit(new LastGoodResponseOnErrorCircuit()
+        .ForException<FileNotFoundException>()
+        .WithOpenTimeInSeconds(5));
+    
+    doStuff();
+}
+```
+
+Return the last good response if the endpoint recieves excess load:
+
+```csharp
+Get["/"] = _ => 
+{
+    // Lst good content if the route gets 100 requests within 5 seconds
+    this.CanShortCircuit(new LastGoodResponseUnderLoad()
+        .WithRequestSampleTimeInSeconds(5)
+        .WithRequestThreshold(100));
     
     doStuff();
 }
