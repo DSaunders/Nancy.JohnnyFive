@@ -1,8 +1,7 @@
-﻿namespace Nancy.JohnnyFive
+﻿namespace Nancy.JohnnyFive.Startup
 {
     using System.Collections.Generic;
     using Bootstrapper;
-    using Store;
 
     public class Registrations : IRegistrations
     {
@@ -12,7 +11,7 @@
             {
                 return new List<TypeRegistration>
                 {
-                    new TypeRegistration(typeof (IJohhnyFiveStore), typeof (JohhnyFiveStore), Lifetime.Singleton)
+                    //new TypeRegistration(typeof (IJohhnyFiveStore), typeof (JohhnyFiveStore), Lifetime.Singleton)
                 };
             }
         }
