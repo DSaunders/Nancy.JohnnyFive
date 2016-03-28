@@ -2,8 +2,9 @@
 {
     using System.Collections.Generic;
     using Bootstrapper;
+    using Store;
 
-    public class Registrations : IRegistrations
+    public class JohhnyFiveRegistrations : IRegistrations
     {
         public IEnumerable<TypeRegistration> TypeRegistrations
         {
@@ -11,7 +12,7 @@
             {
                 return new List<TypeRegistration>
                 {
-                    //new TypeRegistration(typeof (IJohhnyFiveStore), typeof (JohhnyFiveStore), Lifetime.Singleton)
+                    new TypeRegistration(typeof (IStore), typeof (Store), Lifetime.Singleton)
                 };
             }
         }

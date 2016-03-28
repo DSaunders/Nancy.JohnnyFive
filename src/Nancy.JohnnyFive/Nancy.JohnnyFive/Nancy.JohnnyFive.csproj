@@ -61,8 +61,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JohnnyFiveStartup.cs" />
-    <Compile Include="Startup\Registrations.cs" />
+    <Compile Include="Circuits\ICircuit.cs" />
+    <Compile Include="Models\Constants.cs" />
+    <Compile Include="Responders\IResponder.cs" />
+    <Compile Include="Store\IStore.cs" />
+    <Compile Include="_old\JohnnyFiveStartup.cs" />
+    <Compile Include="Models\RouteConfig.cs" />
+    <Compile Include="Startup\JohhnyFiveRegistrations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NancyExtensions.cs" />
   </ItemGroup>
