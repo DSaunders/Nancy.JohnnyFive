@@ -3,9 +3,15 @@
     using Circuits;
     using Responders;
 
-    internal class RouteConfig
+    public class RouteConfig
     {
         public ICircuit Circuit { get; set; }
         public IResponder Responder { get; set; }
+
+        public RouteConfig WithCircuit(ICircuit circuit)
+        {
+            this.Circuit = circuit;
+            return this;
+        }
     }
 }

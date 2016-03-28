@@ -21,10 +21,12 @@
         public void Creates_List_Of_Circuits_On_First_Call()
         {
             // Given
-            var fakeCircuit = new FakeCircuit();
+            var circuit = new FakeCircuit();
+            var responder = new FakeResponder();
 
             // When
-            _fakeModule.CanShortCircuit(fakeCircuit);
+            _fakeModule.CanShortCircuit()
+                ;
 
             // Then
             _fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
@@ -48,16 +50,28 @@
             ((IList)_fakeModule.Context.Items[Constants.ContextItemName])[1].ShouldEqual(fakeCircuit);
         }
 
-        [Fact]
+        [Fact(Skip = "Nothing to use as default yet")]
         public void Adds_Default_Circuit_If_None_Specified()
         {
             // When
-            _fakeModule.CanShortCircuit();
+            //_fakeModule.CanShortCircuit();
 
-            // Then
-            _fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
-            ((IList)_fakeModule.Context.Items[Constants.ContextItemName]).Count.ShouldEqual(1);
-            ((IList)_fakeModule.Context.Items[Constants.ContextItemName])[0].ShouldBeType<LastGoodResponseOnErrorCircuit>();
+            //// Then
+            //_fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
+            //((IList)_fakeModule.Context.Items[Constants.ContextItemName]).Count.ShouldEqual(1);
+            //((IList)_fakeModule.Context.Items[Constants.ContextItemName])[0].ShouldBeType<LastGoodResponseOnErrorCircuit>();
+        }
+
+        [Fact(Skip = "Nothing to use as default yet")]
+        public void Adds_Default_Responder_If_None_Specified()
+        {
+            //// When
+            //_fakeModule.CanShortCircuit();
+
+            //// Then
+            //_fakeModule.Context.Items[Constants.ContextItemName].ShouldBeType<List<ICircuit>>();
+            //((IList)_fakeModule.Context.Items[Constants.ContextItemName]).Count.ShouldEqual(1);
+            //((IList)_fakeModule.Context.Items[Constants.ContextItemName])[0].ShouldBeType<LastGoodResponseOnErrorCircuit>();
         }
     }
 }
