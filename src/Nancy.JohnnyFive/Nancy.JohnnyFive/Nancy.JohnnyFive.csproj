@@ -62,18 +62,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Circuits\ICircuit.cs" />
+    <Compile Include="Circuits\OnErrorCircuit.cs" />
+    <Compile Include="Circuits\UnderLoadCircuit.cs" />
+    <Compile Include="Dates\DateTimeProvider.cs" />
+    <Compile Include="Models\CircuitState.cs" />
     <Compile Include="Models\Constants.cs" />
+    <Compile Include="Responders\LastGoodResponseResponder.cs" />
+    <Compile Include="Responders\NoContentResponder.cs" />
     <Compile Include="Responders\IResponder.cs" />
     <Compile Include="Store\IStore.cs" />
-    <Compile Include="_old\JohnnyFiveStartup.cs" />
+    <Compile Include="Store\Store.cs" />
+    <Compile Include="Startup\AppStartup.cs" />
     <Compile Include="Models\RouteConfig.cs" />
-    <Compile Include="Startup\JohhnyFiveRegistrations.cs" />
+    <Compile Include="Startup\Registrations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NancyExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

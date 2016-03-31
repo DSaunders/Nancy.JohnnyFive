@@ -1,8 +1,10 @@
 ﻿namespace Nancy.JohnnyFive.Sample
 {
     using System;
-    using System.Collections.Generic;
-    using System.IO;
+    using System.Diagnostics;
+    using Circuits;
+    using Responders;
+    using Samples;
 
     public class SampleModule : NancyModule
     {
@@ -10,54 +12,24 @@
         {
             Get["/"] = _ =>
             {
-                //this.CanShortCircuit(new NoContentOnErrorCircuit()
-                //    .ForException<FileNotFoundException>()
-                //    .WithCircuitOpenTimeInSeconds(10));
+                this.CanShortCircuit()
+                    .WithCircuit(new UnderLoadCircuit().WithRequestLimit(3).InSeconds(10))
+                    .WithResponder(new TextResponder())
+                    .WithCallback(() => Debug.WriteLine("Request limit hit!"));
 
-                //this.CanShortCircuit(new NoContentOnErrorCircuit()
-                //    .ForException<KeyNotFoundException>()
-                //    .WithCircuitOpenTimeInSeconds(30));
-                
-                //if (this.Request.Query["fileNotFound"] != null)
-                //    throw new FileNotFoundException();
-
-                //if (this.Request.Query["keyNotFound"] != null)
-                //    throw new KeyNotFoundException();
-
-                return "Hello, World!"; 
+                return "Hello, World!";
             };
 
-            Get["/underload"] = _ =>
+            Get["/canerror"] = _ =>
             {
+                this.CanShortCircuit()
+                    .WithCircuit(new OnErrorCircuit())
+                    .WithResponder(new LastGoodResponseResponder());
 
-                //// Something like this would be nicer
-                //this.CanShortCircuit()
-                //    .UsingHandler(new ExceptionHandler<FileNotFoundException>())
-                //    .Returning(new LastGoodResponseReturner());
+                if (this.Request.Query["error"] != null)
+                    throw new Exception("It broke");
 
-                //this.CanShortCircuit()
-                //    .UsingHandler(new UnderLoadHandler().ForRequests()
-                //    .Returning(new StatusCodeReturner(HttpStatusCode.NoContent))
-                //    .ForSeconds(10);
-
-
-
-
-                //this.CanShortCircuit()
-                //    // Each one of these could get called for each before/after/error and returns the latest
-                //    // This would implement an interface that you could derive from to create custom
-                //    .UsingHandler(new ExceptionHandler<FileNotFoundException>())
-                //    // Something in the before pipeline (or abstracted to the store) returns this when the circuit is closed
-                //    // This would also have to be called for above pipelines in order to get last response etc
-                //    .Returning(new LastGoodResponseReturner());
-
-
-
-                //this.CanShortCircuit(new NoContentUnderLoadCircuit()
-                //    .WithRequestSampleTimeInSeconds(10)
-                //    .WithRequestThreshold(5));
-
-                return "Under load " + DateTime.Now;
+                return "Hello, World! " + DateTime.Now;
             };
         }
     }

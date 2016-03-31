@@ -66,12 +66,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Circuits\OnErrorCircuitTests.cs" />
+    <Compile Include="Circuits\UnderLoadCircuitTests.cs" />
     <Compile Include="Fakes\FakeCircuit.cs" />
     <Compile Include="Fakes\FakeNancyModule.cs" />
+    <Compile Include="Fakes\FakePipelines.cs" />
     <Compile Include="Fakes\FakeResponder.cs" />
+    <Compile Include="Fakes\FakeStore.cs" />
     <Compile Include="NancyExtensionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Responders\LastGoodResponseResponderTests.cs" />
+    <Compile Include="Responders\NoContentResponderTests.cs" />
     <Compile Include="Startup\RegistrationsTests.cs" />
+    <Compile Include="Startup\AppStartupTests.cs" />
     <Compile Include="Store\StoreTests.cs" />
   </ItemGroup>
   <ItemGroup>
