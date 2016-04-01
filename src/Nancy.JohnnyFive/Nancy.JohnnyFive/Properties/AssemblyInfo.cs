@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Nancy.JohnnyFive")]
-[assembly: AssemblyDescription("Adds fault tollerance to Nancy routes")]
+[assembly: AssemblyDescription("Adds fault tolerance to Nancy routes")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Nancy.JohnnyFive")]
