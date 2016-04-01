@@ -28,12 +28,18 @@ Install via NuGet:
 PM > Install-Package Nancy.JohnnyFive
 ```
 
-## Getting started
-
-
 ## Circuits and Responders
 
-### Circuits
+JohhnyFive uses *Circuits* to determine whether a given route action should be hit or bypassed (short-circuited), and *responders* to decide what to return when in short-circuit mode. 
+
+```csharp
+this.CanShortCircuit()
+    .WithCircuit(new UnderLoadCircuit())
+    .WithResponder(new NoContentStatusCodeResponder())
+
+```
+
+## Circuits
 
 'Circuits' are what **Nancy.JohnnyFive** uses to decide whether to allow the route to be hit or not.
 
@@ -44,12 +50,78 @@ A circuit can be in one of the following states:
 | Normal        | The route action will be called as normal                                                     |
 | ShortCircuit  | The route actions *will not be executed*, JohnnyFive will return something else instead       |
 
-### Responders
+The following circuits are provided:
+
+### OnErrorCircuit (default)
+
+This is the default, so specifying no circuit will give you the an 'OnErrorCircuit' with the default configuration.
+
+When an exception is thrown in the route action, short-circuits for a period before opening again and allowing the route action to be hit.
+
+```csharp
+
+// Short-circuits (and returns something else) for 10 seconds if
+// any exception is thrown in this route action
+this.CanShortCircuit()
+    .WithCircuit(new OnErrorCircuit())
+```
+
+OnErrorCircuit can also be configured as follows:
+
+```csharp
+// Short-circuits (and returns something else) for 20 seconds if
+// any SqlException (or derived exception) is thrown in this route action
+this.CanShortCircuit()
+    .WithCircuit(new OnErrorCircuit()
+        .ForExceptionType<SqlException>() 
+        .ShortCircuitsForSeconds(20))
+```
+
+### UnderLoadCircuit
+
+If this route receives more 10 or more requests in a 1-second period, the route will 'short-circuit' and return something else.
+When the number of requests falls back below this threshold, the route will be opened again
+
+```csharp
+// Short-circuits if 10 requests are received in a 1-second period
+this.CanShortCircuit()
+    .WithCircuit(new UnderLoadCircuit())
+```
+
+UnderLoadCircuit can be configured as follows:
+
+```csharp
+// Short-circuits  if 20 requests are received in a 5-second period
+this.CanShortCircuit()
+    .WithCircuit(new UnderLoadCircuit()
+            .WithRequestLimit(20)
+            .InSeconds(5))
+```
+
+## Responders
 
 Responders determine what **Nancy.JohnnyFive** should return if the route is in 'ShortCircuit' mode in place of executing your route action.
 
-### Configuration
+The following responders are provided:
 
+### LastGoodResponseResponder (default)
 
+This is the default, so specifying no responder will give you the a 'LastGoodResponseResponder'.
 
+Returns the last successful response from the route action when a circuit is in 'short-circuit' mode.
 
+```csharp
+this.CanShortCircuit()
+    .WithResponder(new LastGoodResponseResponder())
+```
+
+This returns the *entire* last good response (status code, body etc.), so should be indistinguishable from a 'real' response from the route action to anything that hits the route.
+
+### NoContentStatusCodeResponder
+
+Returns a 'HTTP 204 - No Content' status code when the circuit is in 'short-circuit' mode.
+
+```csharp
+this.CanShortCircuit()
+    .WithResponder(new NoContentStatusCodeResponder())
+```
