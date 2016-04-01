@@ -36,7 +36,6 @@ JohhnyFive uses *Circuits* to determine whether a given route action should be h
 this.CanShortCircuit()
     .WithCircuit(new UnderLoadCircuit())
     .WithResponder(new NoContentStatusCodeResponder())
-
 ```
 
 ## Circuits
@@ -136,4 +135,71 @@ this.CanShortCircuit()
 ```
 
 
+## Implementing your own Circuits and Responders
 
+To implement your own Ciruit or Responder, simply implement ``ICircuit`` or ``IResponder``. You can then use your custom Circuit/Responder in the ``CanShortCircuit`` method.
+
+```csharp
+this.CanShortCircuit()
+    .WithCircuit(new MyCustomCircuit())
+    .WithResponder(new MyCustomResponder())
+```
+
+#### ICircuit
+
+This is an example of a Circuit that alternates between 'Normal' and 'ShortCircuit' state for every other request.
+
+```csharp
+public class FlipFlopCircuit : ICircuit
+{
+    // This is the state of the Circuit. Either 'Normal' or 'ShortCircuit'.
+    // Setting this will determine whether the circuit allows the route action to be hit, or 
+    // short-circuits it entirely and returns the response from the Responder
+    public CircuitState State { get; set; }
+    
+    // Called for every succesful response to a route action that uses 
+    // this circuit
+    public void AfterRequest(Response response)
+    {
+    }
+    
+    // Called before every request to a route action that uses 
+    // this circuit
+    public void BeforeRequest(Request request)
+    {
+        if (State == CircuitState.Normal)
+            State = CircuitState.ShortCircuit;
+        else
+            State = CircuitState.Normal;
+    }
+    
+    // Called when an exception is thrown in a route action that uses 
+    // this circuit
+    public void OnError(Exception ex)
+    {
+    }
+}
+```
+
+### IResponder
+
+This is an example of a Responder that returns the text 'Oops!' when the route is closed.
+
+```csharp
+public class TextResponder : IResponder
+{
+    // This is called after every request. It could be used, for example, to save details of 
+    // successful requests for use later
+    public void AfterRequest(Response response)
+    {   
+    }
+
+    // When a Circuit is in the ShortCircuit state, the result of this method is returned
+    // in place of the real route action
+    public Response GetResponse()
+    {
+        return "Oops!";
+    }
+}
+```
+    
