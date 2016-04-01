@@ -52,7 +52,7 @@ A circuit can be in one of the following states:
 
 The following circuits are provided:
 
-### OnErrorCircuit (default)
+#### OnErrorCircuit (default)
 
 When an exception is thrown in the route action, short-circuits for a period - before opening again and allowing the route action to be hit.
 
@@ -77,7 +77,7 @@ this.CanShortCircuit()
         .ShortCircuitsForSeconds(20))
 ```
 
-### UnderLoadCircuit
+#### UnderLoadCircuit
 
 If this route receives more 10 or more requests in a 1-second period, the route will 'short-circuit' and return something else.
 When the number of requests falls back below this threshold, the route will be opened again
@@ -104,7 +104,7 @@ Responders determine what **Nancy.JohnnyFive** should return if the route is in 
 
 The following responders are provided:
 
-### LastGoodResponseResponder (default)
+#### LastGoodResponseResponder (default)
 
 This is the default, so specifying no responder will give you the a 'LastGoodResponseResponder'.
 
@@ -117,7 +117,7 @@ this.CanShortCircuit()
 
 This returns the *entire* last good response (status code, body etc.), so should be indistinguishable from a 'real' response from the route action to anything that hits the route.
 
-### NoContentStatusCodeResponder
+#### NoContentStatusCodeResponder
 
 Returns a 'HTTP 204 - No Content' status code when the circuit is in 'short-circuit' mode.
 
@@ -126,7 +126,7 @@ this.CanShortCircuit()
     .WithResponder(new NoContentStatusCodeResponder())
 ```
 
-### Callbacks
+## Callbacks
 
 **Nancy.JohnnyFive** allows you to specify a callback that occurs when a route is short-circuited. Any code can be executed in this action, but it is commonly used for logging that the short-circuit has occured:
 
