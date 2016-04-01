@@ -10,7 +10,7 @@
         public void Returns_No_Content()
         {
             // Given
-            var responder = new NoContentResponder();
+            var responder = new NoContentStatusCodeResponder();
 
             // Then
             var response = responder.GetResponse();

@@ -1,6 +1,7 @@
 ﻿namespace Nancy.JohnnyFive.Sample
 {
     using System;
+    using System.Data.SqlClient;
     using System.Diagnostics;
     using Circuits;
     using Responders;
@@ -23,7 +24,9 @@
             Get["/canerror"] = _ =>
             {
                 this.CanShortCircuit()
-                    .WithCircuit(new OnErrorCircuit())
+                    .WithCircuit(new OnErrorCircuit()
+                        .ForExceptionType<SqlException>()
+                        .ShortCircuitsForSeconds(20))
                     .WithResponder(new LastGoodResponseResponder());
 
                 if (this.Request.Query["error"] != null)

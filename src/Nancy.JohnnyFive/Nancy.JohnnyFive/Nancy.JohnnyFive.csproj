@@ -68,7 +68,7 @@
     <Compile Include="Models\CircuitState.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Responders\LastGoodResponseResponder.cs" />
-    <Compile Include="Responders\NoContentResponder.cs" />
+    <Compile Include="Responders\NoContentStatusCodeResponder.cs" />
     <Compile Include="Responders\IResponder.cs" />
     <Compile Include="Store\IStore.cs" />
     <Compile Include="Store\Store.cs" />

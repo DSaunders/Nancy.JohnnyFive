@@ -1,6 +1,6 @@
 ﻿namespace Nancy.JohnnyFive.Responders
 {
-    public class NoContentResponder : IResponder
+    public class NoContentStatusCodeResponder : IResponder
     {
         public void AfterRequest(Response response)
         {
