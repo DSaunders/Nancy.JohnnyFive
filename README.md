@@ -48,15 +48,15 @@ A circuit can be in one of the following states:
 | State         |  Description                                                                                  |   
 | :------------ |:----------------------------------------------------------------------------------------------|
 | Normal        | The route action will be called as normal                                                     |
-| ShortCircuit  | The route actions *will not be executed*, JohnnyFive will return something else instead       |
+| ShortCircuit  | The route action *will not be executed*, JohnnyFive will return something else instead       |
 
 The following circuits are provided:
 
 ### OnErrorCircuit (default)
 
-This is the default, so specifying no circuit will give you the an 'OnErrorCircuit' with the default configuration.
+When an exception is thrown in the route action, short-circuits for a period - before opening again and allowing the route action to be hit.
 
-When an exception is thrown in the route action, short-circuits for a period before opening again and allowing the route action to be hit.
+This is the default, so specifying no circuit will give you the an 'OnErrorCircuit' with the default configuration.
 
 ```csharp
 
@@ -125,3 +125,15 @@ Returns a 'HTTP 204 - No Content' status code when the circuit is in 'short-circ
 this.CanShortCircuit()
     .WithResponder(new NoContentStatusCodeResponder())
 ```
+
+### Callbacks
+
+**Nancy.JohnnyFive** allows you to specify a callback that occurs when a route is short-circuited. Any code can be executed in this action, but it is commonly used for logging that the short-circuit has occured:
+
+```csharp
+this.CanShortCircuit()
+    .WithCallback(() => Debug.WriteLine("Route was short-circuited!"));
+```
+
+
+
