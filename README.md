@@ -35,7 +35,7 @@ JohhnyFive uses *Circuits* to determine whether a given route action should be h
 ```csharp
 this.CanShortCircuit()
     .WithCircuit(new UnderLoadCircuit())
-    .WithResponder(new NoContentStatusCodeResponder())
+    .WithResponder(new NoContentStatusCodeResponder());
 ```
 
 ## Circuits
@@ -61,8 +61,7 @@ This is the default, so specifying no circuit will give you the an 'OnErrorCircu
 
 // Short-circuits (and returns something else) for 10 seconds if
 // any exception is thrown in this route action
-this.CanShortCircuit()
-    .WithCircuit(new OnErrorCircuit())
+this.CanShortCircuit();
 ```
 
 OnErrorCircuit can also be configured as follows:
@@ -73,7 +72,7 @@ OnErrorCircuit can also be configured as follows:
 this.CanShortCircuit()
     .WithCircuit(new OnErrorCircuit()
         .ForExceptionType<SqlException>() 
-        .ShortCircuitsForSeconds(20))
+        .ShortCircuitsForSeconds(20));
 ```
 
 #### UnderLoadCircuit
@@ -84,7 +83,7 @@ When the number of requests falls back below this threshold, the route will be o
 ```csharp
 // Short-circuits if 10 requests are received in a 1-second period
 this.CanShortCircuit()
-    .WithCircuit(new UnderLoadCircuit())
+    .WithCircuit(new UnderLoadCircuit());
 ```
 
 UnderLoadCircuit can be configured as follows:
@@ -94,7 +93,7 @@ UnderLoadCircuit can be configured as follows:
 this.CanShortCircuit()
     .WithCircuit(new UnderLoadCircuit()
             .WithRequestLimit(20)
-            .InSeconds(5))
+            .InSeconds(5));
 ```
 
 ## Responders
@@ -111,7 +110,7 @@ Returns the last successful response from the route action when a circuit is in 
 
 ```csharp
 this.CanShortCircuit()
-    .WithResponder(new LastGoodResponseResponder())
+    .WithResponder(new LastGoodResponseResponder());
 ```
 
 This returns the *entire* last good response (status code, body etc.), so should be indistinguishable from a 'real' response from the route action to anything that hits the route.
@@ -122,7 +121,7 @@ Returns a 'HTTP 204 - No Content' status code when the circuit is in 'short-circ
 
 ```csharp
 this.CanShortCircuit()
-    .WithResponder(new NoContentStatusCodeResponder())
+    .WithResponder(new NoContentStatusCodeResponder());
 ```
 
 ## Callbacks
@@ -142,7 +141,7 @@ To implement your own Ciruit or Responder, simply implement ``ICircuit`` or ``IR
 ```csharp
 this.CanShortCircuit()
     .WithCircuit(new MyCustomCircuit())
-    .WithResponder(new MyCustomResponder())
+    .WithResponder(new MyCustomResponder());
 ```
 
 #### ICircuit
