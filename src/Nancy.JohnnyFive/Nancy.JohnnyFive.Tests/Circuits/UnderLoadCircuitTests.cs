@@ -26,6 +26,32 @@ namespace Nancy.JohnnyFive.Tests.Circuits
             // Then
             circuit.State.ShouldEqual(CircuitState.Normal);
         }
+        
+        [Fact]
+        public void After_Response_Does_Not_Change_State()
+        {
+            // Given
+            var circuit = new UnderLoadCircuit();
+
+            // When
+            circuit.AfterRequest(new Response());
+
+            // Then
+            circuit.State.ShouldEqual(CircuitState.Normal);
+        }
+
+        [Fact]
+        public void OnError_Does_Not_Change_State()
+        {
+            // Given
+            var circuit = new UnderLoadCircuit();
+
+            // When
+            circuit.OnError(new Exception());
+
+            // Then
+            circuit.State.ShouldEqual(CircuitState.Normal);
+        }
 
         [Fact]
         public void Defaults_Request_Threshold_To_10()

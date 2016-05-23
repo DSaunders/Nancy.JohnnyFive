@@ -29,6 +29,19 @@
         }
 
         [Fact]
+        public void After_Response_Does_Not_Change_State()
+        {
+            // Given
+            var circuit = new OnErrorCircuit();
+
+            // When
+            circuit.AfterRequest(new Response());
+
+            // Then
+            circuit.State.ShouldEqual(CircuitState.Normal);
+        }
+
+        [Fact]
         public void Defaults_Exception_To_Base_Class()
         {
             // When
@@ -99,6 +112,19 @@
         }
 
         [Fact]
+        public void Does_Nothing_Before_Request_If_Circuit_Open()
+        {
+            // Given
+            var circuit = new OnErrorCircuit()
+                .ShortCircuitsForSeconds(10);
+            
+            // Then
+            circuit.State.ShouldEqual(CircuitState.Normal);
+            circuit.BeforeRequest(null);
+            circuit.State.ShouldEqual(CircuitState.Normal);
+        }
+
+        [Fact]
         public void Sets_Circuit_To_Normal_After_Time_Period()
         {
             // Given
@@ -143,6 +169,35 @@
             circuit.BeforeRequest(null);
             circuit.State.ShouldEqual(CircuitState.Normal);
         }
+
+        [Fact]
+        public void OnError_ShortCircuits_If_Expression_Matches()
+        {
+            // Given
+            var circuit = new OnErrorCircuit()
+                .ForExceptionType<ArithmeticException>(ex => ex.Message.Contains("this one"));
+
+            // When
+            circuit.OnError(new OverflowException("this one should throw"));
+
+            // Then
+            circuit.State.ShouldEqual(CircuitState.ShortCircuit);
+        }
+
+        [Fact]
+        public void OnError_Does_Not_ShortCircuit_If_Expression_Does_Not_Matches()
+        {
+            // Given
+            var circuit = new OnErrorCircuit()
+                .ForExceptionType<ArithmeticException>(ex => ex.Message.Contains("this one"));
+
+            // When
+            circuit.OnError(new OverflowException("this should now throw"));
+
+            // Then
+            circuit.State.ShouldEqual(CircuitState.Normal);
+        }
+
 
         public void Dispose()
         {

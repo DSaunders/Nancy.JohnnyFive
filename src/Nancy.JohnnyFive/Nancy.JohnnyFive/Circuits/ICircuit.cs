@@ -8,6 +8,6 @@
         CircuitState State { get; set; }
         void AfterRequest(Response response);
         void BeforeRequest(Request request);
-        void OnError(Exception ex);
+        void OnError<T>(T ex) where T : Exception;
     }
 }

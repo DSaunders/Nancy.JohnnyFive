@@ -37,7 +37,7 @@
                 : CircuitState.Normal;
         }
 
-        public void OnError(Exception ex)
+        public void OnError<T>(T ex) where T : Exception
         {
         }
 

@@ -4,10 +4,10 @@ Adds fault tollerance to your Nancy routes.
 ```csharp
 Get["/"] = _ =>
 {
-    // Watch this route for exceptions. If an exception is thrown, stop the route action being called and 
+    // Watch this route for exceptions. If an exception is thrown, stop the route action being called and
     // return the last successsful response for 10 seconds, before allowing the route to be hit again
     this.CanShortCircuit();
-    
+
     return "Hello, World!";
 };
 ```
@@ -18,8 +18,8 @@ Some examples of things that **Nancy.JohnnyFive** can do are:
 - If your route throws an exception, return the last successful response for a period of time, before allowing your code to be hit again
 - If an excessive number of requests hit a given route, avoid executing the code in the route action entirely and return a specified status code instead. When traffic has died down, open the route again
 - and more..
-  
-  
+
+
 ## Installation
 
 Install via NuGet:
@@ -30,7 +30,7 @@ PM > Install-Package Nancy.JohnnyFive
 
 ## Circuits and Responders
 
-JohhnyFive uses *Circuits* to determine whether a given route action should be hit or bypassed (short-circuited), and *responders* to decide what to return when in short-circuit mode. 
+JohhnyFive uses *Circuits* to determine whether a given route action should be hit or bypassed (short-circuited), and *responders* to decide what to return when in short-circuit mode.
 
 ```csharp
 this.CanShortCircuit()
@@ -71,9 +71,18 @@ OnErrorCircuit can also be configured as follows:
 // any SqlException (or derived exception) is thrown in this route action
 this.CanShortCircuit()
     .WithCircuit(new OnErrorCircuit()
-        .ForExceptionType<SqlException>() 
+        .ForExceptionType<SqlException>()
         .ShortCircuitsForSeconds(20));
 ```
+
+You can be even more specific about which exceptions should trigger a short-circuit
+using a lambda expression:
+```csharp
+this.CanShortCircuit()
+    .WithCircuit(new OnErrorCircuit()
+        .ForExceptionType<SqlException>(ex => ex.Message.Contains("timeout"));
+```
+
 
 #### UnderLoadCircuit
 
@@ -152,17 +161,17 @@ This is an example of a Circuit that alternates between 'Normal' and 'ShortCircu
 public class FlipFlopCircuit : ICircuit
 {
     // This is the state of the Circuit. Either 'Normal' or 'ShortCircuit'.
-    // Setting this will determine whether the circuit allows the route action to be hit, or 
+    // Setting this will determine whether the circuit allows the route action to be hit, or
     // short-circuits it entirely and returns the response from the Responder
     public CircuitState State { get; set; }
-    
-    // Called for every succesful response to a route action that uses 
+
+    // Called for every succesful response to a route action that uses
     // this circuit
     public void AfterRequest(Response response)
     {
     }
-    
-    // Called before every request to a route action that uses 
+
+    // Called before every request to a route action that uses
     // this circuit
     public void BeforeRequest(Request request)
     {
@@ -171,8 +180,8 @@ public class FlipFlopCircuit : ICircuit
         else
             State = CircuitState.Normal;
     }
-    
-    // Called when an exception is thrown in a route action that uses 
+
+    // Called when an exception is thrown in a route action that uses
     // this circuit
     public void OnError(Exception ex)
     {
@@ -187,7 +196,7 @@ This is an example of a Responder that returns the text 'Oops!' when the route i
 ```csharp
 public class TextResponder : IResponder
 {
-    // This is called after every request. It could be used, for example, to save details of 
+    // This is called after every request. It could be used, for example, to save details of
     // successful requests for use later
     public void AfterRequest(Response response)
     {   
@@ -201,4 +210,3 @@ public class TextResponder : IResponder
     }
 }
 ```
-    
