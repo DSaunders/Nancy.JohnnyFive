@@ -1,5 +1,5 @@
-#Nancy.JohnnyFive [![NuGet Version](https://img.shields.io/nuget/v/Nancy.JohnnyFive.svg?style=flat)](https://www.nuget.org/packages/Nancy.JohnnyFive/)
-Adds fault tollerance to your Nancy routes.
+# Nancy.JohnnyFive [![NuGet Version](https://img.shields.io/nuget/v/Nancy.JohnnyFive.svg?style=flat)](https://www.nuget.org/packages/Nancy.JohnnyFive/)
+Adds fault tollerance and rate limiting to your Nancy routes.
 
 ```csharp
 Get["/"] = _ =>
