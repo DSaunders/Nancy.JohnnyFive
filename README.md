@@ -86,7 +86,7 @@ this.CanShortCircuit()
 
 #### UnderLoadCircuit
 
-If this route receives more 10 or more requests in a 1-second period, the route will 'short-circuit' and return something else.
+If this route receives 10 or more requests in a 1-second period, the route will 'short-circuit' and return something else.
 When the number of requests falls back below this threshold, the route will be opened again
 
 ```csharp
